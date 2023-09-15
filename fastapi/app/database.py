@@ -8,7 +8,7 @@ try:
     # conn = psycopg.connect(host="localhost", dbname="pgdb", user="postg_dev", password="postgres")
     cur = conn.cursor(row_factory=dict_row)
 except Exception as e:
-    print("Database serror", e)
+    print("Database new serror", e)
 
 
 # class DatabaseUtil:
