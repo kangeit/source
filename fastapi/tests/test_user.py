@@ -17,7 +17,7 @@ def test_add_user():
     
     
 @pytest.mark.get_user
-def test_add_user():
+def test_get_user():
     
     payload = {}
     headers = {}
