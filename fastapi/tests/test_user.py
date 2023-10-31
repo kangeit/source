@@ -1,7 +1,10 @@
 import pytest
 import requests
+from fastapi.testclient import TestClient
+from app.main import app
 
 
+client = TestClient(app)
 
 @pytest.mark.add_user
 def test_add_user():
@@ -10,7 +13,7 @@ def test_add_user():
               "password": "password1"}
     headers = {}
     
-    response = requests.post(url="http://127.0.0.1:8000/users", headers=headers, json=payload)
+    response = requests.post(url="/users", headers=headers, json=payload)
     print(response)
     assert response.status_code == 201
     
