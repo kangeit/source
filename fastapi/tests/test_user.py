@@ -13,9 +13,9 @@ def test_add_user():
               "password": "password1"}
     headers = {}
     
-    response = requests.post(url="/users", headers=headers, json=payload)
-    print(response)
-    assert response.status_code == 201
+    res = client.post(url="/users", headers=headers, json=payload)
+
+    assert res.status_code == 201
     
     
     
@@ -24,9 +24,8 @@ def test_get_user():
     
     payload = {}
     headers = {}
-    response = requests.get(url="http://127.0.0.1:8000/users/11", headers=headers, json=payload)
-    
-    data = response.json()
-    print(data["user_id"])
-    assert data["user_id"] is not None
-    assert response.status_code == 200
+    res = client.get(url="/users/11", headers=headers)
+    data = res.json()
+    print(data)
+    assert data.get("user_id") is not None
+    assert res.status_code == 200
