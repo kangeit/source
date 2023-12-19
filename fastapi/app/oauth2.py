@@ -40,7 +40,6 @@ def get_current_user(token: str = Depends(oauth2_schema)):
                                          detail=f"Could not validate credentials",
                                          headers={"WW-Authenticate": "Bearer"})
     user = verify_access_token(token, credential_exception)
-    database.cur.execute("""select * from users where user_id= %s""",
-                         (user.id,))
-    data = database.cur.fetchone()
-    return data
+    data = database.execute_sql_query("""select * from users where user_id= %s""",
+                         *(user.id,))
+    return data[0]
