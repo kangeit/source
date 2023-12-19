@@ -8,7 +8,7 @@ from app.config import settings
 def test_add_user(client):
     
     payload = {"email": "user1101@test.com",
-              "password": "password1"}
+               "password": "password1"}
     headers = {}
     
     res = client.post(url="/users", headers=headers, json=payload)
