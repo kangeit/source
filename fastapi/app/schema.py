@@ -1,6 +1,6 @@
 from datetime import datetime
 from typing import Optional
-from pydantic import BaseModel, EmailStr, conint
+from pydantic import BaseModel, EmailStr, conint, validator
 
 
 class PostBase(BaseModel):
@@ -44,6 +44,12 @@ class UserCreate(BaseModel):
     email: EmailStr
     password: str
 
+    @validator("email")
+    def validate_gmail_email(cls, value):
+        if not value.lower().endswith("@xxgmail.com"):
+            raise ValueError("invalid email address")
+        return value
+    
     class Config:
         orm_mode = True
 
