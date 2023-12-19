@@ -1,32 +1,43 @@
+from jose import jwt
 import pytest
-import requests
-from fastapi.testclient import TestClient
-from app.main import app
+from app import schema
+from app.config import settings
 
-
-client = TestClient(app)
 
 @pytest.mark.add_user
-def test_add_user():
+def test_add_user(client):
     
-    payload = {"email": "user1@test.com",
-              "password": "password1"}
+    payload = {"email": "user1101@test.com",
+               "password": "password1"}
     headers = {}
     
-    response = requests.post(url="/users", headers=headers, json=payload)
-    print(response)
-    assert response.status_code == 201
+    res = client.post(url="/users", headers=headers, json=payload)
+
+    assert res.status_code == 201
     
     
     
 @pytest.mark.get_user
-def test_get_user():
+def test_get_user(client):
     
     payload = {}
     headers = {}
-    response = requests.get(url="http://127.0.0.1:8000/users/11", headers=headers, json=payload)
+    res = client.get(url="/users/11", headers=headers)
+    user_data = schema.UserResp(**res.json())  
     
-    data = response.json()
-    print(data["user_id"])
-    assert data["user_id"] is not None
-    assert response.status_code == 200
+    assert user_data.user_id is not None
+    assert res.status_code == 200
+
+
+@pytest.mark.login_user
+def test_login_user(client, test_user):
+    
+    payload = {"username": test_user["email"],
+              "password": test_user["password"]}
+    headers = {}
+    res = client.post(url="/login", headers=headers, data=payload)
+    user_data = schema.Token(**res.json())
+    data = jwt.decode(user_data.access_token, settings.secret_key, algorithms=settings.algorithm)
+    assert user_data.token_type == "bearer"
+    assert test_user["user_id"] == data.get("user_id")
+    assert res.status_code == 200
