@@ -12,6 +12,9 @@ def create_user(user: schema.UserCreate):
     query = """insert into users (email, password) values (%s, %s) returning *"""
     params = (user.email, user.password)
     user = db.execute_sql_query(query, *params)
+    if not user:
+        raise HTTPException(status_code=status.HTTP_406_NOT_ACCEPTABLE,
+                            detail="Invalid user name")
     return user
 
 

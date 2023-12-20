@@ -11,23 +11,29 @@ def client():
     # do action before the test
     yield TestClient(app)
     # do action after the test
+ 
     
+@pytest.fixture()
+def db_conn():
+    with psycopg.connect(
+            host=settings.database_hostname, 
+            dbname=settings.database_name,
+            user=settings.database_username, 
+            password=settings.database_password
+        ) as conn:
+        with conn.cursor(row_factory=dict_row) as cursor:
+            yield cursor
+
     
 @pytest.fixture(scope="module")
 def test_user(client):
-    test_user_data = {"email": "testuser@test.com",
-                      "password": "password1"}
+    test_user_data = {"email": "user12192@xxgmail.com",
+                      "password": "pwd1"}
     
     res = client.post(url="/users", json=test_user_data)
     user = res.json()
     user["password"] = test_user_data["password"]
     assert res.status_code == 201
+    print(user)
     return user
 
-try:
-    conn = psycopg.connect(host=settings.database_hostname, dbname=settings.database_name,
-                           user=settings.database_username, password=settings.database_password)
-    # conn = psycopg.connect(host="localhost", dbname="pgdb", user="postg_dev", password="postgres")
-    cur = conn.cursor(row_factory=dict_row)
-except Exception as e:
-    print("Database error", e)
