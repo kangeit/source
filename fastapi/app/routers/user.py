@@ -1,5 +1,5 @@
-from fastapi import status, APIRouter, HTTPException
-from .. import schema, utils, database as db
+from fastapi import status, APIRouter, HTTPException, Depends
+from .. import schema, oauth2, utils, database as db
 
 
 router = APIRouter(prefix="/users", tags=["Users"])
@@ -15,11 +15,11 @@ def create_user(user: schema.UserCreate):
     if not user:
         raise HTTPException(status_code=status.HTTP_406_NOT_ACCEPTABLE,
                             detail="Invalid user name")
-    return user
+    return user[0]
 
 
 @router.get("/{user_id}", response_model=schema.UserResp)
-def get_user(user_id: int):
+def get_user(user_id: int, current_user: schema.UserResp = Depends(oauth2.get_current_user)):
     query = """select * from users where user_id= %s"""
     params = (str(user_id))
     user = db.execute_sql_query(query, params)
