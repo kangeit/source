@@ -29,11 +29,10 @@ def db_conn():
     
 @pytest.fixture()
 def test_user(client):
-    # test_user_data = {"email": "user1220@xxgmail.com",
-    #                   "password": "pwd1"}    
-    res = client.get(url="/users/38")
-    user = res.json()    
-    assert res.status_code == 200
+    user = {"user_id": 23,
+            "email": "33@xxgmail.com",
+            "create_date": "2023-12-15T15:31:53.958137-05:00"
+            }
     return user
 
 

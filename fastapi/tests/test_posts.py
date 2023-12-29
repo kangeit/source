@@ -71,11 +71,10 @@ def test_add_post_default_published_value(authorized_client, test_user, title, c
 
 @pytest.mark.parametrize("title, content", 
                         [("post title 122301", "post content 122301 001")])
-def test_unauthorized_user_add_post(client, test_user, title, content):
+def test_unauthorized_user_add_post(client, title, content):
     payload = {"title": title,
                "content": content,
                }
     headers = {}
     res = client.post(url="/posts/", headers=headers, json=payload)
-    print(res.json().get('detail'))
     assert res.status_code == 401
