@@ -1,0 +1,24 @@
+services:
+  api:
+    build: .
+    depends_on:
+      - postgres
+    ports:
+      - 8000:8000
+    env_file:
+      - ./fastapi/.env
+    volumes:
+      - ./:/usr/src/app
+    command: bash -c "cd fastapi && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
+
+  postgres:
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postg_dev
+      - POSTGRES_DB=pgdb
+    volumes:
+      - postgres-db:/var/lib/postgresql/data
+
+volumes:
+  postgres-db:
