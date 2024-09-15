@@ -19,7 +19,7 @@ def post_vote(vote: schema.Vote, current_user: schema.UserResp = Depends(oauth2.
         try:
             database.execute_sql_query("""insert into votes (post_id, user_id) values (%s, %s) returning *""",
                                  *(vote.post_id, current_user["user_id"]))
-        except ForeignKeyViolation as e:
+        except ForeignKeyViolation:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
                                 detail=f"Post {vote.post_id} does not exists")
         return {"message": "successfully voted"}

@@ -17,7 +17,7 @@ def test_login_fail(client, email, password, status_code):
     headers = {}
     res = client.post(url="/login", headers=headers, data=payload)
     assert res.status_code == status_code
-    # assert res.json().get("detail") == "Invalid Credentials"
+
     
 
 def test_login_user(client):    

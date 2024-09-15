@@ -4,7 +4,6 @@ from app import schema
 def test_get_all_posts(authorized_client):
     res = authorized_client.get("/posts")
     posts = [schema.ResponseVote(**i) for i in res.json()]
-    assert posts is not None
     assert res.status_code == 200
     
 
@@ -24,13 +23,13 @@ def test_get_post_by_id_not_exist(authorized_client):
 def test_unauthorized_user_get_all_posts(client):
     res = client.get("/posts")
     assert res.status_code == 401
-    # assert "Could not validate credentials" in res.json().get("detail")
+
     
 
 def test_unauthorized_user_get_post_by_id(client):
     res = client.get("/posts/22")
     assert res.status_code == 401
-    # assert "Could not validate credentials" in res.json().get("detail")
+
 
 
 @pytest.mark.parametrize("title, content, published", 

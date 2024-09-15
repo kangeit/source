@@ -14,10 +14,10 @@ def login(user_credentials: OAuth2PasswordRequestForm = Depends()):
     user = database.execute_sql_query(query, *params)
     
     if not user:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=f"Invalid Credentials")
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Invalid Credentials")
  
     if not utils.hash_verify(user_credentials.password, user[0]["password"]):
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=f"Invalid Credentials")
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Invalid Credentials")
 
     # create a token
     access_token = oauth2.create_access_token(data={"user_id": user[0]["user_id"]})
