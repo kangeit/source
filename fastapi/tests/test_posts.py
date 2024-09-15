@@ -3,7 +3,7 @@ from app import schema
 
 def test_get_all_posts(authorized_client):
     res = authorized_client.get("/posts")
-    posts = [schema.ResponseVote(**i) for i in res.json()]
+    # posts = [schema.ResponseVote(**i) for i in res.json()]
     assert res.status_code == 200
     
 

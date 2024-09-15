@@ -53,7 +53,6 @@ def get_post(post_id: int, current_user: schema.UserResp = Depends(oauth2.get_cu
     if not post:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"No data found with {post_id}")
-        # return {"message": f"No data found with {book_id}"}
     post = post[0]    
     user_data = database.execute_sql_query("""select * from users where user_id = %s""", *(post['user_id'],))[0]
     post['user'] = user_data
